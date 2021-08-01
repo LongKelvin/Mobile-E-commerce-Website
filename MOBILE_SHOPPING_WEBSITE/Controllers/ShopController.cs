@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MOBILE_SHOPPING_WEBSITE.Models.BUS;
+using MobileShopConnectionString;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,13 +13,26 @@ namespace MOBILE_SHOPPING_WEBSITE.Controllers
         // GET: Shop
         public ActionResult Index()
         {
+            var db =  MobileShopOnlineBUS.ListAllProducts();
+        
+            return View(db);
+        }
+
+
+        // GET: Shop/Details/5
+        public ActionResult Details(string id)
+        {
             return View();
         }
 
-        // GET: Shop/Details/5
-        public ActionResult Details(int id)
+        public JsonResult GetProductImageByID(string productImageID)
         {
-            return View();
+            if (productImageID == null || String.IsNullOrEmpty(productImageID))
+                return Json("Null value", JsonRequestBehavior.AllowGet);
+
+            var db = MobileShopOnlineBUS.GetProductImageByID(productImageID);
+            var result =  db.Select(x => x.ProductImage).First();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Shop/Create
@@ -43,14 +58,14 @@ namespace MOBILE_SHOPPING_WEBSITE.Controllers
         }
 
         // GET: Shop/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
             return View();
         }
 
         // POST: Shop/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(string id, FormCollection collection)
         {
             try
             {
@@ -65,14 +80,14 @@ namespace MOBILE_SHOPPING_WEBSITE.Controllers
         }
 
         // GET: Shop/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             return View();
         }
 
         // POST: Shop/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
